@@ -5,9 +5,7 @@
 #include "usb/usb_ch9.h"
 #include "usb/usb_hid.h"
 
-#ifdef __PIC32MX__
-	#include <plib.h>
-#endif
+#include <plib.h>
 
 #pragma config DEBUG = OFF, ICESEL = ICS_PGx2, PWP = OFF, BWP = OFF, CP = OFF
 #pragma config FNOSC = PRIPLL, FSOSCEN = OFF, IESO = OFF, POSCMOD = HS, \
@@ -18,106 +16,81 @@
 
 int main(void)
 {
+    INTCONbits.MVEC = 1; // Multi-vector interrupts
+    IPC11bits.USBIP = 4; // Interrupt priority, must set to != 0.
+    __asm volatile("ei");
 
-/* Configure interrupts, per architecture */
-#ifdef USB_USE_INTERRUPTS
-	#if defined (_PIC18) || defined(_PIC14E)
-		INTCONbits.PEIE = 1;
-		INTCONbits.GIE = 1;
-	#elif __PIC32MX__
-		INTCONbits.MVEC = 1; /* Multi-vector interrupts */
-		IPC11bits.USBIP = 4; /* Interrupt priority, must set to != 0. */
-		__asm volatile("ei");
-	#endif
-#endif
+    usb_init();
 
-#ifdef MULTI_CLASS_DEVICE
-	hid_set_interface_list(hid_interfaces, sizeof(hid_interfaces));
-#endif
-	usb_init();
+    uint8_t x_count = 100;
+    uint8_t delay = 7;
+    int8_t x_direc = 1;
 
-	/* Setup mouse movement. This implementation sends back data for every
-	 * IN packet, but sends no movement for all but every delay-th frame.
-	 * Adjusting delay will slow down or speed up the movement, which is
-	 * also dependent upon the rate at which the host sends IN packets,
-	 * which varies between implementations.
-	 *
-	 * In real life, you wouldn't want to send back data that hadn't
-	 * changed, but since there's no real hardware to poll, and since this
-	 * example is about showing the HID class, and not about creative ways
-	 * to do timing, we send back data every frame. The interested reader
-	 * may want to modify it to use the start-of-frame callback for
-	 * timing.
-	 */
-	uint8_t x_count = 100;
-	uint8_t delay = 7;
-	int8_t x_direc = 1;
+    while (1)
+    {
+        if (usb_is_configured() && !usb_in_endpoint_halted(1) && !usb_in_endpoint_busy(1))
+        {
+            unsigned char *buf = usb_get_in_buffer(1);
+            buf[0] = 0x0;
+            buf[1] = (--delay) ? 0 : 0x04;
 
-	while (1) {
-		if (usb_is_configured() &&
-		    !usb_in_endpoint_halted(1) &&
-		    !usb_in_endpoint_busy(1)) {
+            usb_send_in_buffer(1, 2);
 
-			unsigned char *buf = usb_get_in_buffer(1);
-			buf[0] = 0x0;
-			buf[1] = (--delay)? 0: x_direc;
-			buf[2] = 0;
-			usb_send_in_buffer(1, 3);
+            if (delay == 0)
+            {
+                if (--x_count == 0)
+                {
+                    x_count = 100;
+                    x_direc *= -1;
+                }
+                delay = 7;
+            }
+        }
+    }
 
-			if (delay == 0) {
-				if (--x_count == 0) {
-					x_count = 100;
-					x_direc *= -1;
-				}
-				delay = 7;
-			}
-		}
-
-		#ifndef USB_USE_INTERRUPTS
-		usb_service();
-		#endif
-	}
-
-	return 0;
+    return 0;
 }
 
-/* Callbacks. These function names are set in usb_config.h. */
-void app_set_configuration_callback(uint8_t configuration)
+
+
+// Callbacks.
+
+void SetConfigurationCallback(uint8_t configuration)
 {
 
 }
 
-uint16_t app_get_device_status_callback()
+uint16_t GetDeviceStatusCallback()
 {
 	return 0x0000;
 }
 
-void app_endpoint_halt_callback(uint8_t endpoint, bool halted)
+void EndpointHaltCallback(uint8_t endpoint, bool halted)
 {
 
 }
 
-int8_t app_set_interface_callback(uint8_t interface, uint8_t alt_setting)
-{
-	return 0;
-}
-
-int8_t app_get_interface_callback(uint8_t interface)
+int8_t SetInterfaceCallback(uint8_t interface, uint8_t alt_setting)
 {
 	return 0;
 }
 
-void app_out_transaction_callback(uint8_t endpoint)
+int8_t GetInterfaceCallback(uint8_t interface)
+{
+	return 0;
+}
+
+void OutTransactionCallback(uint8_t endpoint)
 {
 
 }
 
-void app_in_transaction_complete_callback(uint8_t endpoint)
+void InTransactionCompleteCallback(uint8_t endpoint)
 {
 
 }
 
-int8_t app_unknown_setup_request_callback(const struct setup_packet *setup)
+int8_t UnknownSetupRequestCallback(const struct setup_packet *setup)
 {
 	/* To use the HID device class, have a handler for unknown setup
 	 * requests and call process_hid_setup_request() (as shown here),
@@ -130,76 +103,60 @@ int8_t app_unknown_setup_request_callback(const struct setup_packet *setup)
 	return process_hid_setup_request(setup);
 }
 
-int16_t app_unknown_get_descriptor_callback(const struct setup_packet *pkt, const void **descriptor)
+int16_t UnknownGetDescriptorCallback(const struct setup_packet *pkt, const void **descriptor)
 {
 	return -1;
 }
 
-void app_start_of_frame_callback(void)
+void StartOfFrameCallback(void)
 {
 
 }
 
-void app_usb_reset_callback(void)
+void USBResetCallback(void)
 {
 
 }
 
-/* HID Callbacks. See usb_hid.h for documentation. */
+// HID Callbacks.
 
 static uint8_t report_buf[3];
 
-static void get_report_callback(bool transfer_ok, void *context)
+static void GetReport(bool transfer_ok, void *context)
 {
-	/* Nothing to do here really. It either succeeded or failed. If it
-	 * failed, the host will ask for it again. It's nice to be on the
-	 * device side in USB. */
 }
 
-int16_t app_get_report_callback(uint8_t interface, uint8_t report_type,
-                                uint8_t report_id, const void **report,
-                                usb_ep0_data_stage_callback *callback,
-                                void **context)
+//int16_t app_get_report_callback
+int16_t GetReportCallback(uint8_t interface, uint8_t report_type, uint8_t report_id, const void **report,
+                                usb_ep0_data_stage_callback *callback, void **context)
 {
-	/* This isn't a composite device, so there's no need to check the
-	 * interface here. Also, we know that there's only one report for
-	 * this device, so there's no need to check report_type or report_id.
-	 *
-	 * Set report, callback, and context; and the USB stack will send
-	 * the report, calling our callback (get_report_callback()) when
-	 * it has finished.
-	 */
 	*report = report_buf;
-	*callback = get_report_callback;
+	*callback = GetReport;
 	*context = NULL;
 	return sizeof(report_buf);
 }
 
-int8_t app_set_report_callback(uint8_t interface, uint8_t report_type, uint8_t report_id)
+int8_t SetReportCallback(uint8_t interface, uint8_t report_type, uint8_t report_id)
 {
-	/* To handle Set_Report, call usb_start_receive_ep0_data_stage()
-	 * here. See the documentation for HID_SET_REPORT_CALLBACK() in
-	 * usb_hid.h. For this device though, there are no output or
-	 * feature reports. */
 	return -1;
 }
 
-uint8_t app_get_idle_callback(uint8_t interface, uint8_t report_id)
+uint8_t GetIdleCallback(uint8_t interface, uint8_t report_id)
 {
 	return 0;
 }
 
-int8_t app_set_idle_callback(uint8_t interface, uint8_t report_id, uint8_t idle_rate)
+int8_t SetIdleCallback(uint8_t interface, uint8_t report_id, uint8_t idle_rate)
 {
 	return -1;
 }
 
-int8_t app_get_protocol_callback(uint8_t interface)
+int8_t GetProtocolCallback(uint8_t interface)
 {
 	return 1;
 }
 
-int8_t app_set_protocol_callback(uint8_t interface, uint8_t report_id)
+int8_t SetProtocolCallback(uint8_t interface, uint8_t report_id)
 {
 	return -1;
 }

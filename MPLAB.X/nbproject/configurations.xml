@@ -8,8 +8,6 @@
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
                    projectFiles="true">
-      <itemPath>../../bootloader/firmware/gld/pic24fj64gb002-bootloader.gld</itemPath>
-      <itemPath>../../bootloader/firmware/gld/pic24fj256da206-bootloader.gld</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -70,30 +68,6 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="../../bootloader/firmware/gld/pic24fj256da206-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <C30>
-        </C30>
-        <C30-AS>
-        </C30-AS>
-        <C30-LD>
-        </C30-LD>
-        <C30Global>
-        </C30Global>
-      </item>
-      <item path="../../bootloader/firmware/gld/pic24fj64gb002-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <C30>
-        </C30>
-        <C30-AS>
-        </C30-AS>
-        <C30-LD>
-        </C30-LD>
-        <C30Global>
-        </C30Global>
-      </item>
       <item path="../usb_descriptors.c" ex="false" overriding="false">
         <C30>
         </C30>
@@ -279,18 +253,6 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="../../bootloader/firmware/gld/pic24fj256da206-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <C30>
-        </C30>
-        <C30-AS>
-        </C30-AS>
-        <C30-LD>
-        </C30-LD>
-        <C30Global>
-        </C30Global>
-      </item>
       <item path="../usb_descriptors.c" ex="false" overriding="false">
         <C30>
         </C30>
@@ -476,30 +438,6 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="../../bootloader/firmware/gld/pic24fj256da206-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <C30>
-        </C30>
-        <C30-AS>
-        </C30-AS>
-        <C30-LD>
-        </C30-LD>
-        <C30Global>
-        </C30Global>
-      </item>
-      <item path="../../bootloader/firmware/gld/pic24fj64gb002-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <C30>
-        </C30>
-        <C30-AS>
-        </C30-AS>
-        <C30-LD>
-        </C30-LD>
-        <C30Global>
-        </C30Global>
-      </item>
       <item path="../usb_descriptors.c" ex="false" overriding="false">
         <C30>
         </C30>
@@ -698,18 +636,6 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="../../bootloader/firmware/gld/pic24fj64gb002-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <C30>
-        </C30>
-        <C30-AS>
-        </C30-AS>
-        <C30-LD>
-        </C30-LD>
-        <C30Global>
-        </C30Global>
-      </item>
       <item path="../usb_descriptors.c" ex="false" overriding="false">
         <C30>
         </C30>
@@ -908,26 +834,6 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="../../bootloader/firmware/gld/pic24fj256da206-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <HI-TECH-COMP>
-        </HI-TECH-COMP>
-        <HI-TECH-LINK>
-        </HI-TECH-LINK>
-        <XC8-config-global>
-        </XC8-config-global>
-      </item>
-      <item path="../../bootloader/firmware/gld/pic24fj64gb002-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <HI-TECH-COMP>
-        </HI-TECH-COMP>
-        <HI-TECH-LINK>
-        </HI-TECH-LINK>
-        <XC8-config-global>
-        </XC8-config-global>
-      </item>
       <item path="../usb_descriptors.c" ex="false" overriding="false">
         <HI-TECH-COMP>
         </HI-TECH-COMP>
@@ -1039,26 +945,6 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="../../bootloader/firmware/gld/pic24fj256da206-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <HI-TECH-COMP>
-        </HI-TECH-COMP>
-        <HI-TECH-LINK>
-        </HI-TECH-LINK>
-        <XC8-config-global>
-        </XC8-config-global>
-      </item>
-      <item path="../../bootloader/firmware/gld/pic24fj64gb002-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <HI-TECH-COMP>
-        </HI-TECH-COMP>
-        <HI-TECH-LINK>
-        </HI-TECH-LINK>
-        <XC8-config-global>
-        </XC8-config-global>
-      </item>
       <item path="../usb_descriptors.c" ex="false" overriding="false">
         <HI-TECH-COMP>
         </HI-TECH-COMP>
@@ -1199,34 +1085,6 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="../../bootloader/firmware/gld/pic24fj256da206-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <C32>
-        </C32>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
-      <item path="../../bootloader/firmware/gld/pic24fj64gb002-bootloader.gld"
-            ex="true"
-            overriding="false">
-        <C32>
-        </C32>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
       <item path="../usb_descriptors.c" ex="false" overriding="false">
         <C32>
         </C32>
@@ -1342,6 +1200,7 @@
         <property key="ToolFirmwareFilePath"
                   value="Press to browse for a specific firmware version"/>
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="memories.bootflash" value="true"/>
         <property key="memories.configurationmemory" value="true"/>
         <property key="memories.eeprom" value="true"/>

@@ -42,36 +42,36 @@
 
 
 /* Objects from usb_descriptors.c */
-#define USB_DEVICE_DESCRIPTOR this_device_descriptor
-#define USB_CONFIG_DESCRIPTOR_MAP usb_application_config_descs
-#define USB_STRING_DESCRIPTOR_FUNC usb_application_get_string
+#define USB_DEVICE_DESCRIPTOR DeviceDescriptor
+#define USB_CONFIG_DESCRIPTOR_MAP USBApplicationConfigDescs
+#define USB_STRING_DESCRIPTOR_FUNC USBApplicationGetString
 
 /* Optional callbacks from usb.c. Leave them commented if you don't want to
    use them. For the prototypes and documentation for each one, see usb.h. */
 
-#define SET_CONFIGURATION_CALLBACK app_set_configuration_callback
-#define GET_DEVICE_STATUS_CALLBACK app_get_device_status_callback
-#define ENDPOINT_HALT_CALLBACK     app_endpoint_halt_callback
-#define SET_INTERFACE_CALLBACK     app_set_interface_callback
-#define GET_INTERFACE_CALLBACK     app_get_interface_callback
-#define OUT_TRANSACTION_CALLBACK   app_out_transaction_callback
-#define IN_TRANSACTION_COMPLETE_CALLBACK   app_in_transaction_complete_callback
-#define UNKNOWN_SETUP_REQUEST_CALLBACK app_unknown_setup_request_callback
-#define UNKNOWN_GET_DESCRIPTOR_CALLBACK app_unknown_get_descriptor_callback
-#define START_OF_FRAME_CALLBACK    app_start_of_frame_callback
-#define USB_RESET_CALLBACK         app_usb_reset_callback
+#define SET_CONFIGURATION_CALLBACK SetConfigurationCallback
+#define GET_DEVICE_STATUS_CALLBACK GetDeviceStatusCallback
+#define ENDPOINT_HALT_CALLBACK     EndpointHaltCallback
+#define SET_INTERFACE_CALLBACK     SetInterfaceCallback
+#define GET_INTERFACE_CALLBACK     GetInterfaceCallback
+#define OUT_TRANSACTION_CALLBACK   OutTransactionCallback
+#define IN_TRANSACTION_COMPLETE_CALLBACK   InTransactionCompleteCallback
+#define UNKNOWN_SETUP_REQUEST_CALLBACK UnknownSetupRequestCallback
+#define UNKNOWN_GET_DESCRIPTOR_CALLBACK UnknownGetDescriptorCallback
+#define START_OF_FRAME_CALLBACK    StartOfFrameCallback
+#define USB_RESET_CALLBACK         USBResetCallback
 
 /* HID Configuration functions. See usb_hid.h for documentation. */
-#define USB_HID_DESCRIPTOR_FUNC usb_application_get_hid_descriptor
-#define USB_HID_REPORT_DESCRIPTOR_FUNC usb_application_get_hid_report_descriptor
+#define USB_HID_DESCRIPTOR_FUNC USBApplicationGetHIDDescriptor
+#define USB_HID_REPORT_DESCRIPTOR_FUNC USBApplicationGetHIDReportDescriptor
 //#define USB_HID_PHYSICAL_DESCRIPTOR_FUNC usb_application_get_hid_physical_descriptor
 
 /* HID Callbacks. See usb_hid.h for documentation. */
-#define HID_GET_REPORT_CALLBACK app_get_report_callback
-#define HID_SET_REPORT_CALLBACK app_set_report_callback
-#define HID_GET_IDLE_CALLBACK app_get_idle_callback
-#define HID_SET_IDLE_CALLBACK app_set_idle_callback
-#define HID_GET_PROTOCOL_CALLBACK app_get_protocol_callback
-#define HID_SET_PROTOCOL_CALLBACK app_set_protocol_callback
+#define HID_GET_REPORT_CALLBACK GetReportCallback
+#define HID_SET_REPORT_CALLBACK SetReportCallback
+#define HID_GET_IDLE_CALLBACK GetIdleCallback
+#define HID_SET_IDLE_CALLBACK SetIdleCallback
+#define HID_GET_PROTOCOL_CALLBACK GetProtocolCallback
+#define HID_SET_PROTOCOL_CALLBACK SetProtocolCallback
 
 #endif /* USB_CONFIG_H__ */
