@@ -1,55 +1,84 @@
-#include "usb/usb.h"
 #include <xc.h>
-#include <string.h>
+#include <plib.h>
+
 #include "usb_config.h"
+#include "usb/usb.h"
 #include "usb/usb_ch9.h"
 #include "usb/usb_hid.h"
 
-#include <plib.h>
 
-#pragma config DEBUG = OFF, ICESEL = ICS_PGx2, PWP = OFF, BWP = OFF, CP = OFF
-#pragma config FNOSC = PRIPLL, FSOSCEN = OFF, IESO = OFF, POSCMOD = HS, \
-	       OSCIOFNC = OFF, FPBDIV = DIV_1, FCKSM = CSDCMD, WDTPS = PS1, \
-	       FWDTEN = OFF
-#pragma config FPLLIDIV = DIV_2, FPLLMUL = MUL_15, UPLLIDIV = DIV_2, \
-	       UPLLEN = ON, FPLLODIV = DIV_1
+#pragma config DEBUG = OFF, ICESEL = ICS_PGx1, PWP = OFF, BWP = OFF, CP = OFF
+#pragma config FNOSC = PRIPLL, FSOSCEN = OFF, IESO = OFF, POSCMOD = HS, OSCIOFNC = OFF
+#pragma config FPBDIV = DIV_1, FCKSM = CSDCMD, WDTPS = PS1, FWDTEN = OFF
+#pragma config FPLLIDIV = DIV_2, FPLLMUL = MUL_15, UPLLIDIV = DIV_2, UPLLEN = ON, FPLLODIV = DIV_1
 
-int main(void)
+#define KEY_NONE    0x00
+#define KEY_ENTER   0x28
+
+void DelayMs(int ms)
 {
-    INTCONbits.MVEC = 1; // Multi-vector interrupts
-    IPC11bits.USBIP = 4; // Interrupt priority, must set to != 0.
+    { int i; for (i = 0; i < ms; i++)
+    {
+        WriteTimer1(0);
+        while (ReadTimer1() < 10000);
+    } }
+}
+
+int GetButtonState(void)
+{
+    return (PORTG & (1 << 6)) == 0;
+}
+
+void SendKey(char keyCode)
+{
+    if (usb_is_configured() && !usb_in_endpoint_halted(1) && !usb_in_endpoint_busy(1))
+    {
+        unsigned char *buf = usb_get_in_buffer(1);
+        buf[0] = 0x00;
+        buf[1] = keyCode;
+
+        usb_send_in_buffer(1, 2);
+    }
+}
+
+void Initialize(void)
+{
+    // Set Timer1 so delays work
+    OpenTimer1(T1_ON | T1_IDLE_CON | T1_SOURCE_INT | T1_PS_1_8 | T1_GATE_OFF | T1_SYNC_EXT_OFF, 0xFFFF);
+
+    // Multi-vector interrupts
+    INTCONbits.MVEC = 1;
+    // Interrupt priority, must set to != 0.
+    IPC11bits.USBIP = 4;
     __asm volatile("ei");
 
     usb_init();
 
-    uint8_t x_count = 100;
-    uint8_t delay = 7;
-    int8_t x_direc = 1;
+    // Make the button an input
+    TRISG |= (1 << 6);
+}
 
+int main(void)
+{
+    Initialize();
+    
+    while (GetButtonState());
     while (1)
     {
-        if (usb_is_configured() && !usb_in_endpoint_halted(1) && !usb_in_endpoint_busy(1))
-        {
-            unsigned char *buf = usb_get_in_buffer(1);
-            buf[0] = 0x0;
-            buf[1] = (--delay) ? 0 : 0x04;
+        while (!GetButtonState());
 
-            usb_send_in_buffer(1, 2);
+        SendKey(KEY_ENTER);
+        DelayMs(20);
+        SendKey(KEY_NONE);
+        DelayMs(100);
 
-            if (delay == 0)
-            {
-                if (--x_count == 0)
-                {
-                    x_count = 100;
-                    x_direc *= -1;
-                }
-                delay = 7;
-            }
-        }
+        while (GetButtonState());
+        DelayMs(50);
     }
 
     return 0;
 }
+
 
 
 

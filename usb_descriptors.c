@@ -66,7 +66,7 @@ static const ROMPTR struct configuration_1_packet configuration_1 =
         1, // bConfigurationValue
         2, // iConfiguration (index of string descriptor)
         0b10000000,
-        100/2,   // 100/2 indicates 100mA
+        500/2,   // 100/2 indicates 100mA
     },
 
     {
